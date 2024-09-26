@@ -188,6 +188,13 @@ def game_over():
     text_y = 40
     draw_string("Game Over", text_x, text_y, COLOR_WHITE, COLOR_DARK)
     fill_rect(140, 60, 50, 40, COLOR_WHITE)
+
+    arrow_x = 150
+    arrow_y = 71
+    fill_rect(arrow_x, arrow_y, 30, 18, COLOR_DARK)
+    fill_rect(arrow_x + 3, arrow_y + 3, 25, 15, COLOR_WHITE)
+
+    """
     fill_rect(155, 71, 20, 17, COLOR_DARK)
     fill_rect(158, 75, 14, 10, COLOR_WHITE)
 
@@ -198,6 +205,7 @@ def game_over():
     set_pixel(174, 86, COLOR_WHITE)
     set_pixel(174, 87, COLOR_WHITE)
     set_pixel(173, 87, COLOR_WHITE)
+    """
 
 def restart():
     global is_game_over, dino_y, score, entity_delta

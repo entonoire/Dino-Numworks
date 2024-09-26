@@ -192,7 +192,8 @@ def game_over():
     arrow_x = 150
     arrow_y = 71
     fill_rect(arrow_x, arrow_y, 30, 18, COLOR_DARK)
-    fill_rect(arrow_x + 3, arrow_y + 3, 25, 15, COLOR_WHITE)
+    fill_rect(arrow_x + 3, arrow_y + 3, 24, 12, COLOR_WHITE)
+    fill_rect(arrow_x + 8, arrow_y, 10, 3, COLOR_WHITE)
 
     """
     fill_rect(155, 71, 20, 17, COLOR_DARK)

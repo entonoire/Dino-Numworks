@@ -32,6 +32,7 @@ is_crouching = False
 current_jump_height = JUMP_HEIGHT
 is_game_over = False
 score = 0
+highest_score = 0
 spawned_entity_list = []
 max_entity_spawn_delay = randint(50, 200)
 entity_spawn_delay = 0
@@ -180,13 +181,15 @@ def check_collision(entity):
 
 
 def game_over():
-    global is_game_over
+    global is_game_over, highest_score
     is_game_over = True
     spawned_entity_list.clear()
+    highest_score = score
+    draw_string(f"HG : {highest_score}", 120, 10, COLOR_WHITE, COLOR_DARK)
 
     text_x = 118
     text_y = 40
-    draw_string("Game Over", text_x, text_y, COLOR_WHITE, COLOR_DARK)
+    draw_string("GAME OVER", text_x, text_y, COLOR_WHITE, COLOR_DARK)
     fill_rect(140, 60, 50, 40, COLOR_WHITE)
 
     arrow_x = 150
@@ -195,18 +198,7 @@ def game_over():
     fill_rect(arrow_x + 3, arrow_y + 3, 24, 12, COLOR_WHITE)
     fill_rect(arrow_x + 8, arrow_y, 10, 3, COLOR_WHITE)
 
-    """
-    fill_rect(155, 71, 20, 17, COLOR_DARK)
-    fill_rect(158, 75, 14, 10, COLOR_WHITE)
 
-    set_pixel(155, 86, COLOR_WHITE)
-    set_pixel(155, 87, COLOR_WHITE)
-    set_pixel(156, 87, COLOR_WHITE)
-
-    set_pixel(174, 86, COLOR_WHITE)
-    set_pixel(174, 87, COLOR_WHITE)
-    set_pixel(173, 87, COLOR_WHITE)
-    """
 
 def restart():
     global is_game_over, dino_y, score, entity_delta
@@ -219,27 +211,33 @@ def restart():
 
 init()
 game_over()
+score_delay = 0
 while True:
     sleep(0.005)
     listen_key()
 
     if not is_game_over:
         draw_level()
+        if score_delay >= 17:
+            score += 1
+            score_delay = 0
+        else:
+            score_delay += 1
+
         for entity in spawned_entity_list:
             check_collision(entity)
             update_entity(entity)
 
             if DINO_X - entity.x > ENTITY_OVERLAPPING_DINO_DISTANCE and not entity.overlapped:
                 entity.overlapped = True
-                score += 1
-                if entity_delta < 4.6 and score % 5 == 1:
+                if entity_delta < 4.6 and score % 40 == 1:
                     entity_delta += 0.2
 
         if is_jumping:
             jump()
 
         if entity_spawn_delay >= max_entity_spawn_delay:
-            if score > 20:
+            if score > 100:
                 bird_spawn_probability = randint(1, 4)
 
                 if bird_spawn_probability == 1:

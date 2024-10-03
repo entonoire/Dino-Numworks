@@ -13,6 +13,7 @@ from random import randint
 
 COLOR_DARK = color(32, 33, 36)
 COLOR_WHITE = color(172, 172, 172)
+COLOR_ULTRA_WHITE = color(255, 255, 255)
 COLOR_TEST = color(255, 255, 255)
 SCREEN_W = 320
 SCREEN_H = 222
@@ -50,7 +51,6 @@ class Entity:
         self.y = y
         self.width = width
         self.height = height
-        self.overlapped = False
         self.type = type
         self.animation_time = 0 # only for bird (for now)
 
@@ -114,7 +114,9 @@ def jump():
 
 def draw_level():
     fill_rect(0, 205, 320, 3, COLOR_WHITE)  #draw line
-    draw_string(f"score: {score}", 200, 10, COLOR_WHITE, COLOR_DARK)
+    draw_string(f"score {score}", 200, 10, COLOR_ULTRA_WHITE, COLOR_DARK)
+    if highest_score != 0:
+        draw_string(f"HI {highest_score}", 10, 10, COLOR_ULTRA_WHITE, COLOR_DARK)
 
 
 def update_entity(entity):
@@ -185,7 +187,6 @@ def game_over():
     is_game_over = True
     spawned_entity_list.clear()
     highest_score = score
-    draw_string(f"HG : {highest_score}", 120, 10, COLOR_WHITE, COLOR_DARK)
 
     text_x = 118
     text_y = 40
@@ -210,7 +211,6 @@ def restart():
 
 
 init()
-game_over()
 score_delay = 0
 while True:
     sleep(0.005)
@@ -218,20 +218,18 @@ while True:
 
     if not is_game_over:
         draw_level()
-        if score_delay >= 17:
+        if score_delay >= 10:
             score += 1
             score_delay = 0
+
+            if entity_delta < 4.6 and score % 50 == 1:
+                entity_delta += 0.05
         else:
-            score_delay += 1
+            score_delay += entity_delta
 
         for entity in spawned_entity_list:
             check_collision(entity)
             update_entity(entity)
-
-            if DINO_X - entity.x > ENTITY_OVERLAPPING_DINO_DISTANCE and not entity.overlapped:
-                entity.overlapped = True
-                if entity_delta < 4.6 and score % 40 == 1:
-                    entity_delta += 0.2
 
         if is_jumping:
             jump()
